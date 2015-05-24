@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %}
+<!-- Login Page -->
+
+<!-- Form Section -->
+<section id="search">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <br>
+                <h2>Log In</h2>
+                <hr class="star-primary">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
+                <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
+                <form action="/login" method="post">
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Email Address</label>
+                            <input type="email" class="form-control" placeholder="Email Address" data-name="email" name="email" required data-validation-required-message="Please enter your email address.">
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Password</label>
+                            <input type="password" class="form-control" placeholder="Password" data-name="password" name="password" required data-validation-required-message="Please enter your password.">
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <br>
+                            <input type="submit" class="btn btn-primary" value="Sign In"/>
+                </form>
+                {% if error %}
+                <div class="alert alert-error">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>Error!</strong> {{ error }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

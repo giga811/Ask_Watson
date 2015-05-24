@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+{% block body %}
+<!-- top Page -->
+
+<!-- Form Section -->
+<section id="search">
+    <div class="container">
+        <!-- <div class="row">
+        <div class="col-lg-12 text-center">
+        <br>
+        <h2>Select the region</h2>
+        <hr class="star-primary">
+        </div>
+        </div> -->
+        <div class="row text-center">
+            <br>
+            <p id="area-select-guide" class="help-block text-center"></p>
+            <div id="area-select-map" hidden></div>
+            <form id="area-select-form" action="/top" method="post">
+                <input type="hidden" id="area-select-input" name="pref_id"/>
+            </form>
+            <div id="area-select-current" class="btn btn-primary">
+                Current region:
+                {% if data %} {{data["pref_id"]}} {% else %} 0 {% endif %}
+            </div>
+        </div>
+        <!-- </div> -->
+    <!-- </section>
+
+    <section id="search"> -->
+    <!-- <div class="container"> -->
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <!--タブ-->
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab1" data-toggle="tab">Overal</a></li>
+                    <li><a href="#tab2" data-toggle="tab">Museums</a></li>
+                    <li><a href="#tab2" data-toggle="tab">Parks</a></li>
+                    <li><a href="#tab2" data-toggle="tab">Shrines</a></li>
+                </ul>
+                <!-- /タブ-->
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="tab1">
+                        current language: {{language}} {{user['country']}}
+                        {% if places %}
+                        {% for place in places %}
+                        <a  name="services"></a>
+                        <div class="content-sections">
+                            <div class="container">
+                                <div class="row">
+                                    <hr class="section-heading-spacer">
+                                    <div class="col-md-6 text-left">
+                                        <div class="clearfix"></div>
+                                        <h3 class="section-heading">
+                                            <a href={{place['url'] }}><img src={{place['icon']}} height=40/> {{place["name"]}}</a>
+                                        </h3>
+                                        <p class="lead">
+                                            Tomo Score: <span class="label label-warning">{{ place['score'] }}</span><br>
+                                            Google Rating: {{place['rating']}}<br>
+                                            Total reviews: {{place['user_ratings_total']}}<br>
+                                            Address: {{place['formatted_address']}} <!-- [show in google map{{place['geometry']}}] --><br>
+                                            Phone: {{place['international_phone_number']}}<br>
+                                            URL: <a href={{place['website']}}>{{place['website']}}</a><br>
+                                            <!-- {{place['types']}}<br>
+                                            じゃらんAPI?<br> -->
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="carousel-example-generic" class="carousel slide">
+                                            <!-- Indicators -->
+                                            <ol class="carousel-indicators hidden-xs">
+                                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                            </ol>
+                                            <!-- Wrapper for slides -->
+                                            <div class="carousel-inner">
+                                                <div class="item active">
+                                                    <img class="img-responsive img-full" src={% if place['photo_objs']|length >= 1 %}"{{place['photo_objs'][0]}}"{% else %}"img/slide-1.jpg"{% endif %} alt="" height=300>
+                                                </div>
+                                                <div class="item">
+                                                    <img class="img-responsive img-full" src="img/slide-2.jpg" alt="" height=300>
+                                                </div>
+                                                <div class="item">
+                                                    <img class="img-responsive img-full" src="img/slide-3.jpg" alt="" height=300>
+                                                </div>
+                                            </div>
+                                            <!-- Controls -->
+                                            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                                                <span class="icon-prev"></span>
+                                            </a>
+                                            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                                <span class="icon-next"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.container -->
+
+                    </div>
+
+                    {% endfor %}
+                    {% else %}
+                    <p> No Data </p>
+                    {% endif %}
+                </div>
+                <div class="tab-pane fade" id="tab2">
+                    <p>コンテンツ2</p>
+                    No Data
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+{% endblock %}

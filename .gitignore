@@ -1,0 +1,34 @@
+# Emacs tmp files
+*~
+
+# OS X tmp files
+*.DS_Store
+
+# Python byte code files
+*.pyc
+
+# Fbone (bluespot-app) ignores
+*.egg-info
+*.log
+*.pyc
+*.db
+*.swp
+*.swo
+*.zip
+*.cfg
+*.tox
+*.mo
+
+*.db
+*.sqlite
+
+bluespot-app/dist
+bluespot-app/build
+
+bluespot-app/instance
+bluespot-app/production.py
+bluespot-app/logs
+bluespot-app/uploads
+bluespot-app/openid
+
+bluespot-app/env

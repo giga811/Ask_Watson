@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <link rel="stylesheet" href="/css/my.css">
+    <title>Log Chart</title>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js"></script>
+    <script src="/js/markerclusterer.js"></script>
+
+    <style>
+        body { font: 12px Arial;}
+
+        path {
+            stroke: steelblue;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: grey;
+            stroke-width: 1;
+            shape-rendering: crispEdges;
+        }
+
+        .brush .extent {
+            stroke: #fff;
+            fill-opacity: .125;
+            shape-rendering: crispEdges;
+        }
+        .loader {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.8);
+            text-align: center;
+            z-index: 99;
+            display: none;
+        }
+        .loader p {
+            margin-top: 180px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        'use strict';
+
+        // get log data
+        var sdata = {};
+        var logdata = [];
+        function load_data() {
+            $.ajax({
+                url: "/logview/" + {{ log_id }},
+                dataType: 'json',
+                async: false,
+                cache: false,
+                timeout: 30000,
+                data: { "data" : "data" },
+                success: function(json) {
+                    sdata = json;
+                }
+            });
+        }
+        load_data();
+        var logdata = sdata.data
+
+
+        $(function () {
+
+            requirejs.config({
+                "baseUrl": "./",
+                "paths": {
+                    "app": "/js/d3js/",
+                    'moment': 'http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min',
+                    'underscore': 'http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min'
+                }
+            });
+
+
+            require(['app/d3.chart'], function (d3Chart) {
+                d3Chart.init({ container: '#container', xDim: 'time' });
+
+                d3Chart.addGraph({ id: 'temp', type: 'analog', name: '温度(℃)', dataId: 522, yVal: ['ambientTemp'], data: logdata });
+                d3Chart.addGraph({ id: 'humi', type: 'analog', name: '湿度(%)', dataId: 522, yVal: ['humi'], data: logdata });
+                d3Chart.addGraph({ id: 'pressure', type: 'analog', name: '圧力(mBar)', dataId: 522, yVal: ['pressure'], data: logdata });
+                // d3Chart.addGraph({ id: 'gyro', type: 'analog', name: 'gyro', dataId: 522, yVal: ['gyroX'], data: logdata });
+                d3Chart.render();
+
+            }, 3000);
+
+
+            });
+
+    </script>
+</head>
+<body>
+    <script src="/js/d3js/sample_data.js"></script>
+    <script src="/js/d3js/sample_log.js"></script>
+
+  
+    <div style="height:500px;">
+<<<<<<< HEAD
+        Elevation :<div id="para" style="position:relative;"> </div>
+        <div class="graph" style="width:100%; height:100px;">    </div>
+        <div id="googleMap" style="width:100%;height:400px;">    </div>
+=======
+        <!-- <div class="graph" style="width:100%">    </div> -->
+        <div id="googleMap" style="width:90%;height:500px;">    </div>
+>>>>>>> e7f663bbcbc4ea94a9c336093463e06bc1c9f721
+    </div>
+        <div id="container" style="min-width: 300px;width:100%">
+        <div class="loader"><p>Working...</p></div>
+    </div>
+
+
+</body>
+<script type="text/javascript" src="/js/animation.js"></script>
+<script type="text/javascript">
+    $.when(get_data({{ log_id }})).done(function(){
+  //console.log(sdata);
+  google.maps.event.addDomListener(window, 'load', initialize());
+}); 
+</script>
+</html>

@@ -1,0 +1,14 @@
+html, body, #map-canvas {
+	height: 100%;
+	margin: 0px;
+	padding: 0px
+}
+.bar{
+	border-top: 0 solid #fff;
+	margin-right: 1px;
+	background-color: #cdb6aa;
+	/*height: 100%;*/
+	float: left;
+	cursor: pointer;
+	position: relative;
+}
