@@ -16,3 +16,7 @@ MYSQL_DATABASE_CHARSET = 'utf8'
 # format is dialect+driver://username:password@host:port/database
 # SQLALCHEMY_DATABASE_URI = 'mysql://goomaral:bluespot@localhost/bluespot'
 SQLALCHEMY_DATABASE_URI = 'sqlite+pysqlite:///' + DATABASE
+
+# file upload config
+UPLOAD_FOLDER = '/tmp/askwatson'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])

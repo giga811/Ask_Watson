@@ -7,7 +7,7 @@
 # Python byte code files
 *.pyc
 
-# Fbone (bluespot-app) ignores
+# Fbone (askwatson-app) ignores
 *.egg-info
 *.log
 *.pyc
@@ -22,13 +22,16 @@
 *.db
 *.sqlite
 
-bluespot-app/dist
-bluespot-app/build
+askwatosn-app/dist
+askwatson-app/build
 
-bluespot-app/instance
-bluespot-app/production.py
-bluespot-app/logs
-bluespot-app/uploads
-bluespot-app/openid
+askwatson-app/instance
+askwatson-app/production.py
+askwatson-app/logs
+askwatson-app/uploads
+askwatson-app/openid
 
-bluespot-app/env
+askwatson-app/env
+
+# other
+*test.sh

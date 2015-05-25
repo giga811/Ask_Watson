@@ -17,6 +17,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object('settings')
+app.config.from_envvar('ALCHEMY_APIKEY')
 api = Api(app)
 db = SQLAlchemy(app)
 
