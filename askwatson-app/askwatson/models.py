@@ -22,48 +22,20 @@ class User(db.Model):
     def __getitem__(self, name):
         return self.__getattribute__(name)
 
-# logdata
-class Logdata(db.Model):
+# ImageLog
+class ImageLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    log_id = db.Column(db.Integer)
-    latitude = db.Column(db.Text)
-    longitude = db.Column(db.Text)
+    user = db.Column(db.Text)
+    image_hash = db.Column(db.Text)
+    result_json = db.Column(db.Text)
     time = db.Column(db.Text)
-    humi = db.Column(db.Text)
-    temp = db.Column(db.Text)
-    accelX = db.Column(db.Text)
-    accelY = db.Column(db.Text)
-    accelZ = db.Column(db.Text)
-    gyroX = db.Column(db.Text)
-    gyroY = db.Column(db.Text)
-    gyroZ = db.Column(db.Text)
-    objectTemp = db.Column(db.Text)
-    ambientTemp = db.Column(db.Text)
-    magX = db.Column(db.Text)
-    magY = db.Column(db.Text)
-    magZ = db.Column(db.Text)
-    pressure = db.Column(db.Text)
     other = db.Column(db.Text)
 
-    def __init__(self, log_id, latitude, longitude, time, humi, temp, accelX, accelY, accelZ, gyroX, gyroY, gyroZ, objectTemp, ambientTemp, magX, magY, magZ, pressure, other=""):
-        self.log_id = log_id
-        self.latitude = latitude
-        self.longitude = longitude
+    def __init__(self, image_hash, result_json, time, user="Anonymous", other=""):
+        self.user = user
+        self.image_hash = image_hash
+        self.result_json = result_json
         self.time = time
-        self.humi = humi
-        self.temp = temp
-        self.accelX = accelX
-        self.accelY = accelY
-        self.accelZ = accelZ
-        self.gyroX = gyroX
-        self.gyroY = gyroY
-        self.gyroZ = gyroZ
-        self.objectTemp = objectTemp
-        self.ambientTemp = ambientTemp
-        self.magX = magX
-        self.magY = magY
-        self.magZ = magZ
-        self.pressure = pressure
         self.other = other
 
     # def __repr__(self):
@@ -76,5 +48,4 @@ class Logdata(db.Model):
         result = {}
         for key in self.__mapper__.c.keys():
             result[key] = getattr(self, key)
-        result["DateTime"] = self.time.replace("/", "-").replace(" ", "T")
         return result

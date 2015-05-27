@@ -1,7 +1,10 @@
 """Config"""
 
+# APP Folder
+PATH = '/tmp/askwatson/'
+
 ### Variables
-DATABASE = 'database.db'
+DATABASE = PATH + 'askwatson.db'
 PER_PAGE = 30
 DEBUG = True
 SECRET_KEY = 'askwatson' # secret key for app
@@ -18,5 +21,6 @@ MYSQL_DATABASE_CHARSET = 'utf8'
 SQLALCHEMY_DATABASE_URI = 'sqlite+pysqlite:///' + DATABASE
 
 # file upload config
-UPLOAD_FOLDER = '/tmp/askwatson'
+UPLOAD_FOLDER = PATH + 'upload'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+MAX_CONTENT_LENGTH = 16 * 1024 * 1024
