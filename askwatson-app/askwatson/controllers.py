@@ -56,8 +56,8 @@ def howold():
     if request.method == 'POST':
         # Captcha verify
         response = request.form.get("g-recaptcha-response")
-        if not recaptcha(response):
-          return redirect(url_for('howold', error="Please Verify Recaptcha."), code=302)
+        # if not recaptcha(response):
+        #   return redirect(url_for('howold', error="Please Verify Recaptcha."), code=302)
 
         file = request.files['image']
         if file and allowed_file(file.filename):
@@ -65,26 +65,66 @@ def howold():
 
             # file save place is UPLOAD_FOLDER/raw/<md5_hash>
             filedir = os.path.join(app.config['UPLOAD_FOLDER'], 'raw')
+            fileconvdir = os.path.join(app.config['UPLOAD_FOLDER'], 'conv')
+            fileresultdir = os.path.join(app.config['UPLOAD_FOLDER'], 'result')
             if not os.path.exists(filedir):
-                os.makedirs(filedir)
+              os.makedirs(filedir)
+            if not os.path.exists(fileconvdir):
+              os.makedirs(fileconvdir)
+            if not os.path.exists(fileresultdir):
+              os.makedirs(fileresultdir)
 
+            # file hash name
             filebuf = file.read()
-            file.seek(0)
             hasher.update(filebuf)
-            filehash = hasher.hexdigest()
-            fileext = os.path.splitext(file.filename)[1]
-            filename = filehash + fileext
-
+            filename = hasher.hexdigest() + os.path.splitext(file.filename)[1]
+            # file save
+            file.seek(0)
             file.save(os.path.join(filedir, filename))
             print "# File save ok: " + os.path.join(filedir, filename)
+            # File resize
+            cmd = """
+            convert {src} -auto-orient -resize {width}x\> {target}
+            """.format(width=1500, src=os.path.join(filedir, filename), target=os.path.join(fileconvdir, filename))
+            os.system(cmd)
+            os.system("""
+              cp {src} {target}
+              """.format(src=os.path.join(fileconvdir, filename), target=os.path.join(fileresultdir, filename)))
+            print "# Image Resize ok: " + os.path.join(fileconvdir, filename)
+
             # Call the API
-            resp = image_api(os.path.join(filedir, filename))
+            resp = image_api(os.path.join(fileconvdir, filename))
 
             # save it to db
             log = ImageLog(filename, resp, time, ip)
             db.session.add(log)
             db.session.commit()
             print "# DB add ok: " + str(log)
+
+            # Draw Result
+            j = json.loads(resp)
+            if "status" in j:
+              if j["status"] == "OK":
+                # for each faces
+                i = 1
+                for f in j["imageFaces"]:
+                  x = int(f["positionX"])
+                  y = int(f["positionY"])
+                  h = int(f["height"])
+                  w = int(f["width"])
+                  text = f["gender"]["gender"] + " " + f["age"]["ageRange"]
+                  cmd = """
+                  convert {src} -fill none -stroke blue -strokewidth {strokewidth} -draw "rectangle {x1},{y1} {x2},{y2}" -fill red -pointsize {pointsize} -draw "text {textx},{texty} '{text}'" -fill yellow -pointsize {pointsize} -draw "text {x1},{y1} '{num}'" {target}
+                  """.format(src=os.path.join(fileresultdir, filename),
+                   strokewidth=5, x1=x, y1=y, x2=x+w, y2=y+h,
+                   textx=x, texty=y+h, pointsize=32, text=text,
+                   target=os.path.join(fileresultdir, filename),
+                   num=i)
+                  print cmd
+                  os.system(cmd)
+                  i += 1
+                print "# Drawing result ok: " + os.path.join(fileresultdir, filename)
+
 
             return redirect(url_for('howold', image=filename), code=302)
         else:
@@ -105,7 +145,7 @@ def howold():
 
 @app.route('/images/raw/<filename>')
 def send_file(filename):
-    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'raw'), filename)
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'result'), filename)
 
 # Recaptcha verify
 def recaptcha(response):
