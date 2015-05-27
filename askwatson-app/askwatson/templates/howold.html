@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block sc_top %}
+<script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 
 {% block body %}
@@ -30,6 +31,8 @@
             <div align="center">
                 <input type="file" accept="image/*;capture=camera" name="image"/>
             </div>
+            <!-- Captcha -->
+            <div class="g-recaptcha" data-sitekey="6LdHdQcTAAAAAPX77A-RAQ9E4IeZVo45Xxr4AnIi"></div>
                 <p><input id="submit" class="btn btn-primary large" type="submit" value="HOW OLD AM I" onclick="loader()"></p>
             </form>
             <img src="/static/img/ajax-loader.gif" id="loading-indicator" style="display:none;"/>

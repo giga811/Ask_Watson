@@ -24,6 +24,7 @@ import hashlib
 ALCHEMY_URLIMAGE_API="http://access.alchemyapi.com/calls/url/URLGetRankedImageFaceTags"
 ALCHEMY_IMAGE_API="http://access.alchemyapi.com/calls/image/ImageGetRankedImageFaceTags"
 APIKEY=app.config['ALCHEMY_APIKEY']
+RECAPTCHA_KEY=app.config['RECAPTCHA_KEY']
 
 # upload
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'])
@@ -53,6 +54,10 @@ def howold():
 
     # if POST
     if request.method == 'POST':
+        # Captcha verify
+        response = request.form.get("g-recaptcha-response")
+        if not recaptcha(response):
+          return redirect(url_for('howold', error="Please Verify Recaptcha."), code=302)
 
         file = request.files['image']
         if file and allowed_file(file.filename):
@@ -68,21 +73,23 @@ def howold():
             hasher.update(filebuf)
             filehash = hasher.hexdigest()
             fileext = os.path.splitext(file.filename)[1]
+            filename = filehash + fileext
 
-            file.save(os.path.join(filedir, filehash + fileext))
-            print "# File save ok: " + os.path.join(filedir, filehash + fileext)
+            file.save(os.path.join(filedir, filename))
+            print "# File save ok: " + os.path.join(filedir, filename)
             # Call the API
-            resp = image_api(os.path.join(filedir, filehash + fileext))
+            resp = image_api(os.path.join(filedir, filename))
 
             # save it to db
-            log = ImageLog(filehash + fileext, resp, time, ip)
+            log = ImageLog(filename, resp, time, ip)
             db.session.add(log)
             db.session.commit()
             print "# DB add ok: " + str(log)
 
-            return redirect(url_for('howold', image=filehash + fileext), code=302)
+            return redirect(url_for('howold', image=filename), code=302)
         else:
-            return redirect(url_for('howold', error="Please Select Photo."), code=302)
+            print "# File upload error."
+            return redirect(url_for('howold', error="Upload error. Please Select Photo."), code=302)
 
     # if GET
     if request.method == 'GET':
@@ -100,9 +107,17 @@ def howold():
 def send_file(filename):
     return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'raw'), filename)
 
+# Recaptcha verify
+def recaptcha(response):
+  params = {'secret': RECAPTCHA_KEY,
+            'response': response}
+  URL = "https://www.google.com/recaptcha/api/siteverify"
+  print "# Checking Recaptcha " + response[-10]
+  r = requests.post(URL, params=params)
+  print r.text
+  return json.loads(r.text)["success"]
 
 # api
-@app.route("/api/urlimage_api")
 def urlimage_api():
 
   # url parameter
@@ -129,7 +144,6 @@ def urlimage_api():
   j = json.loads(r.text)
 
   return r.text
-  # return "Your age is " + str(j["imageFaces"][0]["age"])
 
 def image_api(filename=""):
   print "# Calling API: " + filename
