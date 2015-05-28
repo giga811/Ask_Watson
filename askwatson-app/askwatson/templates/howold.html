@@ -15,7 +15,17 @@
             {% if image %}
             <span class="skills">
             <!-- <img class="img-responsive" src="http://www.washingtonpost.com/wp-srv/special/lifestyle/the-age-of-obama/img/obama-v2/obama09.jpg" alt="How old do I look"> -->
-            <img class="img-responsive" src="/images/raw/{{ image }}" alt="How old do I look">
+
+            <!-- Image block -->
+            <div id="thumbContainer" class="center-block" style="padding-left: 0px; position: relative;">
+            <!-- Result Image -->
+            <img id="result_image" class="img-responsive center-block" src="/images/result/{{ image }}" onerror=" this.onerror = null;this.src = '/static/img/profile-default.png'; " alt="How old do I look">
+
+            <!-- Tooltips -->
+            <div id="tooltips">
+            </div>
+
+            </div>
             Image: {{ image }}<br>
             <p>
                 <div id="howold_result"></div>
@@ -29,13 +39,19 @@
 
             <form method="post" action="/howold" enctype="multipart/form-data">
             <div align="center">
-                <input type="file" accept="image/*;capture=camera" name="image"/>
+                Select your photo:<br>
+                <input type="file" accept="image/*;capture=camera" name="image"/><br>
             </div>
             <!-- Captcha -->
-            <div class="g-recaptcha" data-sitekey="6LdHdQcTAAAAAPX77A-RAQ9E4IeZVo45Xxr4AnIi"></div>
-                <p><input id="submit" class="btn btn-primary large" type="submit" value="HOW OLD AM I" onclick="loader()"></p>
+            <div align="center" class="g-recaptcha" data-sitekey="6LdHdQcTAAAAAPX77A-RAQ9E4IeZVo45Xxr4AnIi"></div>
+                <p><input id="submit" class="btn btn-primary large" type="submit" value="HOW OLD AM I?" onclick="loader()"></p>
             </form>
-            <img src="/static/img/ajax-loader.gif" id="loading-indicator" style="display:none;"/>
+            <p>Note that we keep photos temporarily on server.</p>
+            <p>We won't use it for any other purpose.</p>
+            <div id="loading-indicator" style="display:none;">
+            <img src="/static/img/ajax-loader.gif"/><br>
+            It takes a while please be patient ;)
+            </div>
             </span>
 
             {% endif %}
@@ -50,6 +66,11 @@
 <div class="row">
     <div class="col-lg-12 text-center">
         <a href="/howold"><h2>Try Another Photo</h2></a>
+
+        <h3>Behind the scene</h3>
+        <img style="background-color: #fff;" src="/img/alchemyAPI.png">
+            <p>Ask Watson - "How Old Am I" is using Face Detection/Recognition API provided by AlchemyAPI.<br><a style="background-color: #fff;" href="http://www.alchemyapi.com/">http://www.alchemyapi.com/</a></p>
+            <p><i>"AlchemyAPI is helping pioneer a computer’s ability to understand human language and vision via an easy-to-use SaaS API. Integrate advanced text mining and computer vision functionality into your application, service, or data-processing pipeline."</i> - <a style="background-color: #fff;" href="http://www.alchemyapi.com/">AlchemyAPI</a></p>
     </div>
 </div>
 </div>

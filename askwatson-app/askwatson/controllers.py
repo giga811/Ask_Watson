@@ -42,6 +42,11 @@ def howold2():
 
   return render_template('howold.html', j=j)
 
+# route for ABOUT
+@app.route("/about")
+def about():
+  return render_template('about.html')
+
 # file upload test
 def allowed_file(filename):
   return '.' in filename and \
@@ -56,8 +61,8 @@ def howold():
     if request.method == 'POST':
         # Captcha verify
         response = request.form.get("g-recaptcha-response")
-        # if not recaptcha(response):
-        #   return redirect(url_for('howold', error="Please Verify Recaptcha."), code=302)
+        if not recaptcha(response):
+          return redirect(url_for('howold', error="Please Verify Recaptcha."), code=302)
 
         file = request.files['image']
         if file and allowed_file(file.filename):
@@ -84,7 +89,7 @@ def howold():
             print "# File save ok: " + os.path.join(filedir, filename)
             # File resize
             cmd = """
-            convert {src} -auto-orient -resize {width}x\> {target}
+            convert {src} -auto-orient -resize {width}x\> -define jpeg:extent=800kb {target}
             """.format(width=1500, src=os.path.join(filedir, filename), target=os.path.join(fileconvdir, filename))
             os.system(cmd)
             os.system("""
@@ -143,16 +148,16 @@ def howold():
 
     return "ok"
 
-@app.route('/images/raw/<filename>')
+@app.route('/images/result/<filename>')
 def send_file(filename):
-    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'result'), filename)
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'conv'), filename)
 
 # Recaptcha verify
 def recaptcha(response):
   params = {'secret': RECAPTCHA_KEY,
             'response': response}
   URL = "https://www.google.com/recaptcha/api/siteverify"
-  print "# Checking Recaptcha " + response[-10]
+  print "# Checking Recaptcha "
   r = requests.post(URL, params=params)
   print r.text
   return json.loads(r.text)["success"]

@@ -22,5 +22,4 @@ SQLALCHEMY_DATABASE_URI = 'sqlite+pysqlite:///' + DATABASE
 
 # file upload config
 UPLOAD_FOLDER = PATH + 'upload'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+MAX_CONTENT_LENGTH = 5 * 1024 * 1024

@@ -5621,8 +5621,10 @@ button.close {
   padding: 3px 8px;
   color: #ffffff;
   text-align: center;
+  font-size: 32px;
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(13, 71, 161, 0.8);
+  box-shadow: 5px 5px 10px #333;
   border-radius: 4px;
 }
 .tooltip-arrow {
@@ -5637,7 +5639,7 @@ button.close {
   left: 50%;
   margin-left: -5px;
   border-width: 5px 5px 0;
-  border-top-color: rgba(0, 0, 0, 0.9);
+  border-top-color: rgba(13, 71, 161, 0.8);
 }
 .tooltip.top-left .tooltip-arrow {
   bottom: 0;
