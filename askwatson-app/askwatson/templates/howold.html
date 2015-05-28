@@ -83,5 +83,7 @@
 <script type="text/javascript">
     var j = {{ j | tojson | safe }}
     howold_result(j);
+    setTimeout(howold_result(j), 2000);
+    setTimeout(howold_result(j), 5000);
 </script>
 {% endblock %}

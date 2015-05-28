@@ -26,6 +26,7 @@ function howold_result (dataJson) {
                 out.append('Sorry No Faces Detected :( Please try another photo.')
             } else {
                 // for each faces
+                tooltips = [];
                 $.each(j.imageFaces, function(i, face) {
                     out.append('Face ' + (i + 1) + '：<br>');
                     // gender
