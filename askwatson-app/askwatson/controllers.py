@@ -119,7 +119,9 @@ def howold():
                   w = int(f["width"])
                   text = f["gender"]["gender"] + " " + f["age"]["ageRange"]
                   cmd = """
-                  convert {src} -fill none -stroke blue -strokewidth {strokewidth} -draw "rectangle {x1},{y1} {x2},{y2}" -fill red -pointsize {pointsize} -draw "text {textx},{texty} '{text}'" -fill yellow -pointsize {pointsize} -draw "text {x1},{y1} '{num}'" {target}
+                  convert {src} -fill none -stroke blue -strokewidth {strokewidth} -draw "rectangle {x1},{y1} {x2},{y2}" {target}
+convert {src} -fill red -pointsize {pointsize} -draw "text {textx},{texty} '{text}'" {target}
+convert {src}  -fill yellow -pointsize {pointsize} -draw "text {x1},{y1} '{num}'" {target}
                   """.format(src=os.path.join(fileresultdir, filename),
                    strokewidth=5, x1=x, y1=y, x2=x+w, y2=y+h,
                    textx=x, texty=y+h, pointsize=32, text=text,
